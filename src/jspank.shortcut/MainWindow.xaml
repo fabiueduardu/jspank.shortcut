@@ -1,0 +1,24 @@
+﻿<Window x:Class="jspank.shortcut.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:jspank.shortcut"
+        mc:Ignorable="d"
+        Title="jspank.shortcut" Height="350" Width="753.522">
+    <Grid Margin="0,0,2,-4">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="45*"/>
+        </Grid.ColumnDefinitions>
+        <TextBox x:Name="txt_program_path" HorizontalAlignment="Left" Height="23" Margin="50,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="652" ToolTip="" UndoLimit="10000" Grid.Column="1"/>
+        <Button x:Name="btn_add" Content="put" HorizontalAlignment="Left" Margin="547,40,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="btn_add_Click" Grid.Column="1"/>
+        <TextBox x:Name="txt_program_alias" HorizontalAlignment="Left" Height="23" Margin="50,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="412" UndoLimit="20" Grid.Column="1"/>
+        <ListBox x:Name="lst_alias" HorizontalAlignment="Left" Height="235" Margin="10,68,0,0" VerticalAlignment="Top" Width="724" RenderTransformOrigin="0.5,0.5" SelectionChanged="lst_alias_SelectionChanged" Grid.ColumnSpan="2"/>
+        <Button x:Name="btn_remove" Content="remove" HorizontalAlignment="Left" Margin="627,40,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="btn_remove_Click" IsEnabled="False" Grid.Column="1"/>
+        <Label x:Name="label" Content="Path.exe" HorizontalAlignment="Left" Margin="13,10,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="64"/>
+        <Label x:Name="label1" Content="Caller" HorizontalAlignment="Left" Margin="13,36,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="55"/>
+        <Button x:Name="btn_new" Content="new" HorizontalAlignment="Left" Margin="467,40,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="btn_new_Click" Grid.Column="1"/>
+
+    </Grid>
+</Window>
