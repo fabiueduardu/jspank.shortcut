@@ -2,12 +2,12 @@
 using System.Windows;
 using System.Linq;
 using System.Windows.Controls;
+using System;
+using System.IO;
+using System.Collections.ObjectModel;
 
 namespace jspank.shortcut
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         string key_extension = ".exe";
@@ -23,6 +23,24 @@ namespace jspank.shortcut
         {
             InitializeComponent();
             this.Load_Alias();
+            this.Bkp();
+        }
+
+        void Bkp()
+        {
+            var path_bkp = string.Concat(Environment.CurrentDirectory, @"\RegistryKeys.Bkp");
+            if (!File.Exists(path_bkp))
+            {
+                var collection = new Collection<string>();
+                collection.Add(Environment.UserName);
+                foreach (string key in this.RegistryKeys.GetSubKeyNames())
+                {
+                    var value = this.RegistryKeys.OpenSubKey(key).GetValue(null) as string;
+                    collection.Add(string.Concat(key, "|", value));
+                }
+
+                File.AppendAllLines(path_bkp, collection);
+            }
         }
 
         void Load_Alias()
