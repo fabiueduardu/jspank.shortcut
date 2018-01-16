@@ -20,6 +20,7 @@ namespace jspank.apps
         {
             var value = Base64Service.Encode(this.txt_text.Text);
             Clipboard.SetText(value);
+
             this.Close();
         }
 

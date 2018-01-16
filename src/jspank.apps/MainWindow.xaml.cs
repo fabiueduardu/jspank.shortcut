@@ -15,7 +15,7 @@ namespace jspank.apps
      
             var args = Environment.GetCommandLineArgs();
 
-            if (args != null && args.Length >= 1)
+            if (args != null && args.Length > 1)
             {
                 switch (args[1])
                 {
