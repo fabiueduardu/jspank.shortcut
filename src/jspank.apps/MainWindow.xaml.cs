@@ -19,7 +19,7 @@ namespace jspank.apps
             {
                 switch (args[1])
                 {
-                    case "texteditencodedecodebase64":
+                    case "b64":
                         this.ShowWindow<TextEditEncodeDecodeBase64>();
                         break;
                 }
