@@ -6,32 +6,56 @@ using System.IO;
 using System.Collections.Generic;
 using jspank.clipboard.Service;
 using System.Configuration;
+using System.Reflection;
+using System.Web.Security;
+using System.Diagnostics;
 
 namespace jspank.clipboard
 {
 
     class Program
     {
-        static bool ViewAbout
+        private static bool ViewResult
         {
             get
             {
-                var value = ConfigurationManager.AppSettings["ViewAbout"] as string;
+                var value = ConfigurationManager.AppSettings["ViewResult"] as string;
                 return !string.IsNullOrEmpty(value) && value.Equals("1");
+            }
+        }
+        private static string MailDomain
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["MailDomain"] ?? "@mock.com";
+            }
+        }
+        private const string FolderRepositories = @"\Resources\Repositories\";
+        private static string CurrentDirectory
+        {
+            get
+            {
+                return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             }
         }
 
         [STAThreadAttribute]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Console.BackgroundColor = ConsoleColor.Blue;
-            Console.WriteLine("\t\t#### keys ####");
-            Console.WriteLine("\t cpf");
-            Console.WriteLine("\t mail");
-            Console.WriteLine("\t dec Ex: \"Caller\" dec MessageBase64ToDecode");
-            Console.WriteLine("\t enc Ex: \"Caller\" dec MessageToEncodeBase64");
-            Console.WriteLine("\t ??? - other itens in repository folder /Resource/Repository/ Ex: Lorem.txt");
+            var currentDirectoryRepositories = string.Concat(CurrentDirectory, FolderRepositories);
 
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.WriteLine("\t\t#### keys ####");
+            Console.WriteLine("\t cpf/");
+            Console.WriteLine("\t cnpj/");
+            Console.WriteLine("\t mail/");
+            Console.WriteLine("\t dec/ Ex: \"Caller\" dec MessageBase64ToDecode");
+            Console.WriteLine("\t enc/ Ex: \"Caller\" enc MessageToEncodeBase64");
+            Console.WriteLine("\t open/");
+            Console.WriteLine("\t pwd/");
+            Console.WriteLine("\t start/ key from file start.* in repository folder ex: jspank.clipboard;c:\\jspank.clipboard;arguments");
+            Console.WriteLine("\t ??? - other itens in repository folder Ex: Lorem.txt" );
+            Console.WriteLine("\n\t repository: {0}", currentDirectoryRepositories);
 
             var value = string.Empty;
             var onsuccess = false;
@@ -44,31 +68,88 @@ namespace jspank.clipboard
                         Clipboard.SetText(CPFGenerate.Get.ToString());
                         onsuccess = true;
                         break;
+                    case "cnpj":
+                        Clipboard.SetText(CNPJGenerate.Get.ToString());
+                        onsuccess = true;
+                        break;
                     case "mail":
-                        Clipboard.SetText(string.Concat(CPFGenerate.Get, "@fake.com"));
+                        Clipboard.SetText(string.Concat(CPFGenerate.Get, MailDomain));
                         onsuccess = true;
                         break;
                     case "dec":
-                        Clipboard.SetText(Base64Service.Decode(args[1]));
+                    case "enc":
+
+                        var value_args = args.Select((v, i) => new { i, v }).Where(a => a.i > 0);
+                        var value_result = string.Join(" ", value_args.Select(a => a.v));
+
+                        if (value.Equals("dec"))
+                            Clipboard.SetText(Base64Service.Decode(value_result));
+                        else
+                            Clipboard.SetText(Base64Service.Encode(value_result));
+
                         onsuccess = true;
                         break;
-                    case "enc":
-                        Clipboard.SetText(Base64Service.Encode(args[1]));
-                        onsuccess = true;
+                    case "pwd":
+                        int length = 0, numberOfNonAlphanumericCharacters = 0;
+
+                        if (args.Length > 1)
+                        {
+                            int.TryParse(args[1], out length);
+
+                            if (args.Length > 2)
+                                int.TryParse(args[2], out numberOfNonAlphanumericCharacters);
+
+                        }
+                        length = length <= 0 ? 10 : length;
+                        numberOfNonAlphanumericCharacters = numberOfNonAlphanumericCharacters <= 0 || numberOfNonAlphanumericCharacters > length ? 2 : numberOfNonAlphanumericCharacters;
+
+                        Clipboard.SetText(Membership.GeneratePassword(length, numberOfNonAlphanumericCharacters));
+                        break;
+                    case "start":
+                        {
+                            var d_repository = new DirectoryInfo(currentDirectoryRepositories);
+                            foreach (var file in d_repository.GetFiles(value + ".*", SearchOption.AllDirectories))
+                            {
+                                foreach (var line in File.ReadAllLines(file.FullName))
+                                {
+                                    if (line.StartsWith(args[1]))
+                                    {
+                                        var start_ = line.Split(';');
+                                        var start_target = start_[1];
+                                        var start_target_arguments = start_.Length > 2 ? start_[2] : null;
+
+                                        Process.Start(start_target, start_target_arguments);
+ 
+                                        onsuccess = true;
+                                    }
+                                }
+                            }
+                        }
                         break;
                     default:
-                        var d_repository = new DirectoryInfo(string.Concat(Environment.CurrentDirectory, @"\Resource\Repository\"));
-
-                        var lines = new List<string>();
-                        foreach (var file in d_repository.GetFiles(value + ".*", SearchOption.AllDirectories))
-                            lines.AddRange(File.ReadAllLines(file.FullName).Where(a => !string.IsNullOrEmpty(a)));
-
-                        if (lines.Any())
                         {
-                            Clipboard.SetText(lines.OrderBy(a => Guid.NewGuid()).FirstOrDefault());
-                            onsuccess = true;
-                        }
+                            try
+                            {
+                                var d_repository = new DirectoryInfo(currentDirectoryRepositories);
+                                if (!d_repository.Exists) d_repository.Create();
 
+                                var lines = new List<string>();
+                                foreach (var file in d_repository.GetFiles(value + ".*", SearchOption.AllDirectories))
+                                    lines.AddRange(File.ReadAllLines(file.FullName).Where(a => !string.IsNullOrEmpty(a)));
+
+                                if (lines.Any())
+                                {
+                                    Clipboard.SetText(lines.OrderBy(a => Guid.NewGuid()).FirstOrDefault());
+                                    onsuccess = true;
+                                }
+                            }
+                            catch (Exception exp)
+                            {
+                                Console.BackgroundColor = ConsoleColor.Red;
+                                Console.WriteLine(exp);
+
+                            }
+                        }
                         break;
                 }
             }
@@ -84,7 +165,7 @@ namespace jspank.clipboard
                 Console.WriteLine("\n\n\t >> key \"{0}\" to clipboard with success", value);
             }
 
-            if (ViewAbout)
+            if (ViewResult)
                 Console.ReadKey();
         }
     }

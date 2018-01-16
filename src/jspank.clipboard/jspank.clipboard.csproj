@@ -49,9 +49,11 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Db\CNPJGenerate.cs" />
     <Compile Include="Db\CPFGenerate.cs" />
     <Compile Include="Service\Base64Service.cs" />
     <Compile Include="Program.cs" />
@@ -73,7 +75,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resource\Repository\Lorem.txt">
+    <Content Include="Resources\Repositories\Lorem.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Repositories\Start.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
