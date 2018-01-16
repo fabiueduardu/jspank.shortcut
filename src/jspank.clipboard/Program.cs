@@ -1,14 +1,14 @@
-﻿using System;
-using System.Windows.Forms;
-using System.Linq;
-using jspank.clipboard.Db;
-using System.IO;
+﻿using jspank.clipboard.Db;
+using jspank.core.Services;
+using System;
 using System.Collections.Generic;
-using jspank.clipboard.Service;
 using System.Configuration;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Web.Security;
-using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace jspank.clipboard
 {
@@ -51,7 +51,6 @@ namespace jspank.clipboard
             Console.WriteLine("\t mail/");
             Console.WriteLine("\t dec/ Ex: \"Caller\" dec MessageBase64ToDecode");
             Console.WriteLine("\t enc/ Ex: \"Caller\" enc MessageToEncodeBase64");
-            Console.WriteLine("\t open/");
             Console.WriteLine("\t pwd/");
             Console.WriteLine("\t start/ key from file start.* in repository folder ex: jspank.clipboard;c:\\jspank.clipboard;arguments");
             Console.WriteLine("\t ??? - other itens in repository folder Ex: Lorem.txt" );

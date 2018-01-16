@@ -1,10 +1,10 @@
 ﻿using Microsoft.Win32;
-using System.Windows;
-using System.Linq;
-using System.Windows.Controls;
 using System;
-using System.IO;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace jspank.shortcut
 {

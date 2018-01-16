@@ -55,7 +55,6 @@
   <ItemGroup>
     <Compile Include="Db\CNPJGenerate.cs" />
     <Compile Include="Db\CPFGenerate.cs" />
-    <Compile Include="Service\Base64Service.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -82,10 +81,17 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\jspank.core\jspank.core.csproj">
+      <Project>{778f37d9-2c58-45b1-ada5-2186a86e3ac3}</Project>
+      <Name>jspank.core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Release copy /Y "$(TargetDir)\$(ProjectName).exe" "$(SolutionDir)..\release\$(ProjectName)\"
-if $(ConfigurationName) == Release copy /Y "$(TargetDir)\$(ProjectName).exe.config" "$(SolutionDir)..\release\$(ProjectName)\"</PostBuildEvent>
+if $(ConfigurationName) == Release copy /Y "$(TargetDir)\$(ProjectName).exe.config" "$(SolutionDir)..\release\$(ProjectName)\"
+if $(ConfigurationName) == Release copy /Y "$(TargetDir)\*.dll" "$(SolutionDir)..\release\$(ProjectName)\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

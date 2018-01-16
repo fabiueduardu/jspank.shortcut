@@ -1,4 +1,4 @@
-﻿namespace jspank.clipboard.Service
+﻿namespace jspank.core.Services
 {
     public static class Base64Service
     {
