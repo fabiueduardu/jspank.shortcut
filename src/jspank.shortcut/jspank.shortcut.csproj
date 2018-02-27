@@ -96,8 +96,19 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Release copy /Y "$(TargetDir)\$(ProjectName).exe" "$(SolutionDir)..\release\$(ProjectName)\"
-if $(ConfigurationName) == Release copy /Y "$(TargetDir)\$(ProjectName).exe.config" "$(SolutionDir)..\release\$(ProjectName)\"</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName) == Debug goto :Debug
+
+rd /q /s "$(TargetDir)\$(ProjectName)\" 
+del "$(SolutionDir)release\$(ProjectName).zip" 
+mkdir "$(TargetDir)\$(ProjectName)\" 
+
+copy /Y "$(TargetDir)\$(ProjectName).exe" "$(TargetDir)\$(ProjectName)\" 
+copy /Y "$(TargetDir)\$(ProjectName).exe.config" "$(TargetDir)\$(ProjectName)\" 
+copy /Y "$(TargetDir)\*.dll" "$(TargetDir)\$(ProjectName)\" 
+Powershell -File $(SolutionDir)tools\ZipRelease.ps1  $(TargetDir)$(ProjectName)\ $(SolutionDir)release\$(ProjectName).zip
+
+:Debug
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{778F37D9-2C58-45B1-ADA5-2186A86E3AC3}</ProjectGuid>
+    <ProjectGuid>{34CC745C-251A-451F-A773-CB2ECE9323CD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>jspank.core</RootNamespace>
-    <AssemblyName>jspank.core</AssemblyName>
+    <RootNamespace>jspank.crosscutting.ioc</RootNamespace>
+    <AssemblyName>jspank.crosscutting.ioc</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,9 +33,23 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IocContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Base64Service.cs" />
-    <Compile Include="Services\ITranslateService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SimpleInjector">
+      <Version>4.0.12</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\jspank.core\jspank.core.csproj">
+      <Project>{778f37d9-2c58-45b1-ada5-2186a86e3ac3}</Project>
+      <Name>jspank.core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\jspank.crosscutting.googletranslate\jspank.crosscutting.googletranslate.csproj">
+      <Project>{a65f405c-fa7c-44a9-811b-49bad2f0e64c}</Project>
+      <Name>jspank.crosscutting.googletranslate</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
